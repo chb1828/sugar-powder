@@ -1,0 +1,49 @@
+spring:
+  profiles:
+    active: dev
+server:
+  port: 8080
+
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://sugar-db.cfxsa3gqblxj.ap-northeast-2.rds.amazonaws.com:3306/dayday?characterEncoding=UTF-8
+    username: sugar
+    password: sugarpowder
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+
+---
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://sugar-db.cfxsa3gqblxj.ap-northeast-2.rds.amazonaws.com:3306/dayday?characterEncoding=UTF-8
+    username: sugar
+    password: sugarpowder
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+logging:
+  level:
+    root: INFO
+---
+---
+spring:
+  profiles: docker
+  datasource:
+    platform: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db/sugarpowder
+    username: postgres
+    password: su
+  jpa:
+    hibernate:
+      ddl-auto: update
+---
+spring:
+  profiles: staging

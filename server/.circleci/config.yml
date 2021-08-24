@@ -1,0 +1,83 @@
+version: 2.1
+
+orbs:
+  aws-s3: circleci/aws-s3@1.0.13
+  aws-code-deploy: circleci/aws-code-deploy@0.0.12
+
+executors:
+  my-executor:
+    docker:
+      - image: circleci/openjdk:11-jdk
+
+    working_directory: ~/dayday
+
+jobs:
+  build:
+    executor: my-executor
+
+    environment:
+      _JAVA_OPTIONS: "-Xmx3g" # Heap memory
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+
+      - run: chmod +x gradlew
+      - run:
+          name: Downloading Dependencies
+          command: ./gradlew dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}  # build.gradle 파일에서 무언가가 변경 될 때마다 캐시가 재생성되며,이 프로젝트의 다른 브랜치는 동일한 캐시 키를 생성합니다.
+
+      - run: ./gradlew clean build
+
+      - run:
+          name: before_deploy
+          command: |
+            tar cvzf dayday.tgz script/*.sh appspec.yml build/libs/*.jar
+
+      - persist_to_workspace:
+          root: .
+          paths: .
+  deploy:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          at: .
+
+      - aws-s3/copy:
+          from: dayday.tgz
+          to: 's3://sugar-deploy'
+          aws-region: AWS_DEFAULT_REGION
+
+      - aws-code-deploy/deploy-bundle:
+          application-name: sugar-deploy
+          deployment-group: sugar-server-deploy
+          deployment-config: CodeDeployDefault.AllAtOnce
+          bundle-bucket: sugar-deploy
+          bundle-key: dayday
+          bundle-type: tgz
+
+
+workflows:
+  version: 2.1
+
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

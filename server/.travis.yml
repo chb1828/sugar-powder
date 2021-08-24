@@ -1,0 +1,41 @@
+language: java
+jdk:
+  - openjdk8
+
+branches:
+  only:
+    - master
+
+# Travis CI 서버의 Home
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+script:
+  # Build
+  - ./gradlew clean build
+
+  - DOCKER_USER=sugarpowder
+  - DOCKER_PASS=sugar1234
+  - PRJ_NAME=spas
+  - PRJ_VERSION=0.0.1
+
+  - echo "## PROJECT_GROUP - ${PRJ_GROUP}"
+  - echo "## PROJECT_NAME - ${PRJ_NAME}"
+  - echo "## PROJECT_VERSION - ${PRJ_VERSION}"
+
+  - PRJ_JAR=${PRJ_NAME}.jar
+  #- PRJ_JAR=${PRJ_NAME}-${PRJ_VERSION}.jar
+
+  # DOCKER BUILD
+  - docker build -t ${PRJ_NAME} --build-arg JAR_FILE=build/libs/${PRJ_JAR} ./
+
+  # PUSH TO DOCKER HUB
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+  - docker tag ${PRJ_NAME} ${DOCKER_USER}/${PRJ_NAME}:latest
+
+  - docker push ${DOCKER_USER}/${PRJ_NAME}
+
+before_install:
+  - chmod +x gradlew

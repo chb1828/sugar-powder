@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1073529185506-46tjcb4qqfaggepma1p617fecv17ho3l.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1073529185506-46tjcb4qqfaggepma1p617fecv17ho3l</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC7tDMbAauy8CJkvC-vdD6ux3n5-caKbhM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1073529185506</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sugarpowder.dayday</string>
+	<key>PROJECT_ID</key>
+	<string>dayday-30222</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dayday-30222.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1073529185506:ios:0857be7e4236b876766abb</string>
+	<key>DATABASE_URL</key>
+	<string>https://dayday-30222.firebaseio.com</string>
+</dict>
+</plist>
